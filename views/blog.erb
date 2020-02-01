@@ -5,18 +5,18 @@
 <br>
 <div class="media">
   <img src="\resources\richard.jpg" class="mr-3" alt="...">
-  <div class="media-body">id: <b><%=post['id']%></b>
+  <div class="media-body">Історія з життя: <b><%=post['id']%></b>
    <h6><span class="badge badge-secondary"><%=post['date']%></span></h6> <h5 class="mt-0"><%=post['topic']%></h5>
     <%=post['body']%>
-      </div> <%db1 = add_db%>
+       <%db1 = add_db%>
     <%res1 = db1.execute('select * from Comments where post_id = ?',[@post_i])%>
 <%res1.each do |post|%>
-<br><br><br>
-<span class="badge badge-secondary"><br>Коментар :  <br><br><br><br><%=post['comment']%></span>
+
+<span class="badge badge-success">Коментар :  <%=post['comment']%></span>
 
 <%db1.close%>
  <%end%>
-
+</div>
   <a class="btn btn-outline-secondary" href="/comment/<%=post['id']%>" role="button" aria-controls="multiCollapseExample1">Залишити коментар</a>
  </span></h6>
 </div>
