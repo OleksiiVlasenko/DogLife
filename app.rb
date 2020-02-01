@@ -24,6 +24,11 @@ end
     "body"  TEXT,
     "photo"  TEXT
     );') 
+     @db.execute ('CREATE TABLE if not exists "Comments" (
+    "id"  INTEGER PRIMARY KEY AUTOINCREMENT,
+    "comment"  TEXT,
+    "post_id"  TEXT
+    );') 
   enable :sessions
 end
 
@@ -78,7 +83,7 @@ post '/newpost' do
 
   @db.execute("insert into Blog(topic,date,body,photo) values(?,?,?,?)",[topic,date,body,photo])
   @db.close
-  erb :/
+  erb :blog
 end
 
 get "/comment/:post_id" do
@@ -86,9 +91,19 @@ get "/comment/:post_id" do
   post_id = params[:post_id]
   result = @db.execute'select * from Blog where id = ?',[post_id]
   @row = result[0]
+  @db.close
   erb :comment
 end
 
 
+post "/comment/:post_id" do
+  @db = add_db
+  post_id = params[:post_id]
+  comment = params['comment']
+  @db.execute("insert into Comments(comment,post_id) values(?,?)",[comment,post_id])
+  
+  @db.close
+  erb :blog
+end
 
 
