@@ -1,0 +1,15 @@
+
+<%db = add_db%>
+<%db.results_as_hash = true%>
+<%reslust = db.execute'select * from Blog order by date desc'%>
+<%reslust.each do |post|%>
+<br>
+<div class="media">
+  <img src=".\resources\richard.jpg" class="mr-3" alt="...">
+  <div class="media-body">
+    <h5 class="mt-0"><%=post['topic']%></h5>
+    <%=post['body']%>
+  </div>
+</div>
+<%end%>
+<br>

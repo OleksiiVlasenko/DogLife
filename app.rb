@@ -1,8 +1,30 @@
 require 'rubygems'
 require 'sinatra'
+require 'sinatra/reloader'
+require 'sqlite3'
 
+def add_db
+  return db = SQLite3::Database.new('.\public\doglife.db')
+  # return db.results_as_hash = true
+end
 configure do
+  configure do
+  @db = add_db
+    @db.execute ('CREATE TABLE if not exists "Users" (
+    "id"  INTEGER PRIMARY KEY AUTOINCREMENT,
+    "name"  TEXT,
+    "pass"  TEXT,
+    "role"  TEXT
+    );')  
+    @db.execute ('CREATE TABLE if not exists "Blog" (
+    "id"  INTEGER PRIMARY KEY AUTOINCREMENT,
+    "topic"  TEXT,
+    "date"  TEXT,
+    "body"  TEXT,
+    "photo"  TEXT
+    );') 
   enable :sessions
+end
 end
 
 helpers do
@@ -20,7 +42,7 @@ before '/secure/*' do
 end
 
 get '/' do
-  erb 'Can you handle a <a href="/secure/place">secret</a>?'
+  erb :blog
 end
 
 get '/login/form' do
@@ -40,4 +62,22 @@ end
 
 get '/secure/place' do
   erb 'This is a secret place that only <%=session[:identity]%> has access to!'
+end
+
+
+get '/newpost' do
+  erb :newpost
+end
+
+post '/newpost' do
+  
+  
+  topic = params['topic']
+  date  = params['date']
+  body  = params['body']
+  photo = params['photo']
+
+  @db.execute("insert into Blog(topic,date,body,photo) values(?,?,?,?)",[topic,date,body,photo])
+  @db.close
+  erb :blog
 end
