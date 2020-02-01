@@ -106,4 +106,7 @@ post "/comment/:post_id" do
   erb :blog
 end
 
+get '/admin' do
+  erb :admin
+end
 
