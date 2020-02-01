@@ -4,10 +4,11 @@ require 'sinatra/reloader'
 require 'sqlite3'
 
 def add_db
-  return db = SQLite3::Database.new('.\public\doglife.db')
-  # return db.results_as_hash = true
+     @db = SQLite3::Database.new('.\public\doglife.db')
+    @db.results_as_hash = true
+    return @db
 end
-configure do
+
   configure do
   @db = add_db
     @db.execute ('CREATE TABLE if not exists "Users" (
@@ -25,13 +26,11 @@ configure do
     );') 
   enable :sessions
 end
-end
 
-helpers do
   def username
     session[:identity] ? session[:identity] : 'Hello stranger'
   end
-end
+
 
 before '/secure/*' do
   unless session[:identity]
@@ -40,6 +39,7 @@ before '/secure/*' do
     halt erb(:login_form)
   end
 end
+
 
 get '/' do
   erb :blog
@@ -70,8 +70,7 @@ get '/newpost' do
 end
 
 post '/newpost' do
-  
-  
+  @db = add_db
   topic = params['topic']
   date  = params['date']
   body  = params['body']
@@ -79,10 +78,17 @@ post '/newpost' do
 
   @db.execute("insert into Blog(topic,date,body,photo) values(?,?,?,?)",[topic,date,body,photo])
   @db.close
-  erb :blog
+  erb :/
 end
 
-get "/post/:post_id" do
+get "/comment/:post_id" do
+  @db = add_db
   post_id = params[:post_id]
-  erb "#{post_id}"
+  result = @db.execute'select * from Blog where id = ?',[post_id]
+  @row = result[0]
+  erb :comment
 end
+
+
+
+

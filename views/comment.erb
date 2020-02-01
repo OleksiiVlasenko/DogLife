@@ -1,0 +1,21 @@
+
+<br>
+<div class="media">
+  <img src="\resources\richard.jpg" class="mr-3" alt="...">
+  <div class="media-body">
+   <h6><span class="badge badge-secondary"><%=@row['date']%></span></h6> 
+   <h5 class="mt-0"><%=@row['topic']%></h5>
+    <%=@row['body']%>
+  </div>
+
+ </span></h6>
+</div>
+<br>
+
+ <form method="POST" action="/post/<%=@row['id']%>" class="form-outline">
+  <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Напиши мені коментар" name="comment"></textarea>
+  <br>
+ <button type="submit" class="btn btn-primary mb-2">Додати коментар</button>
+ </form>
+
+
