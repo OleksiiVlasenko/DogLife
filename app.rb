@@ -47,6 +47,8 @@ end
 
 
 get '/' do
+  @db = add_db
+  res = @db.execute('select * from Blog order by id desc')
   erb :blog
 end
 
@@ -83,7 +85,8 @@ post '/newpost' do
 
   @db.execute("insert into Blog(topic,date,body,photo) values(?,?,?,?)",[topic,date,body,photo])
   @db.close
-  erb :blog
+  # erb :blog
+  redirect ('/')
 end
 
 get "/comment/:post_id" do
@@ -103,10 +106,22 @@ post "/comment/:post_id" do
   @db.execute("insert into Comments(comment,post_id) values(?,?)",[comment,post_id])
   
   @db.close
-  erb :blog
+  # erb :blog
+  redirect ('/')
 end
 
 get '/admin' do
+  @db = add_db
+  rese = @db.execute('select * from Blog order by id desc')
+  @db.close
+  erb :admin
+end
+
+post '/admin' do
+  post_to_delete = params['post_to_delete']
+  @db = add_db
+  @db.execute('delete from Blog where id = ?',[post_to_delete])
+  erb "<div class='alert alert-message'>Logged out</div>" 
   erb :admin
 end
 
