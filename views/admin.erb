@@ -1,18 +1,30 @@
+ <form method="POST" action="/admin">
+  <div class="form-group">
+   <br> 
+    <input type="input" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Вкажи номер повідомлення до видалення" name="post_to_delete">
+    <small id="emailHelp" class="form-text text-muted">Вибрати статю можна зі списку знизу, будьте уважні!</small>
+  </div>
+ 
+  <button type="submit" class="btn btn-primary">Видалити</button>
+</form>
+<br>
 
 
-   <table>
+  <table class="table table-hover table-dark">
    <tr>
     <th>&nbsp;</th><th>id</th><th>Назва посту</th><th>Дата</th>
    </tr>
-   <tr>
-    <td>Рубины</td><td>43</td><td>51</td><td>79</td>
-   </tr>
-   <tr>
-    <td>Изумруды</td><td>28</td><td>34</td><td>48</td>
-   </tr>
-   <tr>
-    <td>Сапфиры</td><td>29</td><td>57</td><td>36</td>
-   </tr>
-  </table>
+<%@db = add_db%>
+<%res = @db.execute('select * from Blog order by id desc')%>
+<%res.each do |post|%>
 
+
+ 
+   <tr>
+    <td></td><td><%=post['id']%> </td><td><%=post['topic']%> </td><td><%=post['date']%></td>
+   </tr>
+  
+<%@db.close%>
+    <%end%>
+    </table>
 
